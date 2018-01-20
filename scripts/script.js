@@ -1,7 +1,4 @@
 $(function() {
-    $('#ok').hide();
-    $('#redo').hide();
-    $('#redoredo').hide();
     $('#rectangle').hide();
     Webcam.set({
         flip_horiz: true,
@@ -10,47 +7,60 @@ $(function() {
 
     function take_snapshot() {
         Webcam.snap(function(data_uri) {
-            document.getElementById('my_result').innerHTML = '<img src="' + data_uri + '"/>';
-            $('#my_camera').hide();
-            $('#my_result').show();
-            $('#ok').text("Ok");
-            $('#redo').text("Re-take");
-            $('#ok').show();
-            $('#redo').show();
+            //document.getElementById('my_result').innerHTML = '<img src="' + data_uri + '"/>';
+            $('#my_camera').show();
+            $('#my_result').hide();
             getFaceInfo(dataURItoBlob(data_uri));
             $('table').hide();
-            $('#cameraButton').hide();
-            $('.result_div').hide();
+            $('.result_div').show();
         });
     }
-    $("#cameraButton").click(take_snapshot)
-    $('#ok').on('click', function() {
-        $(this).hide();
-        $('#redo').hide();
-        $('#cameraButton').hide();
-        $('table').show();
-        $('#redoredo').text('Re-take')
-        $('#redoredo').show();
-        $('.result_div').show();
-        $("#rectangle").css("display", "inline");
-    });
-    $('#redo').on('click', function() {
-        $('#my_result').hide();
-        $('#my_camera').show();
-        $('#ok').hide();
-        $(this).hide();
-        $('table').hide();
-        $('#cameraButton').show();
-        $('.result_div').hide();
-    });
-    $('#redoredo').on('click', function() {
-        $('#my_camera').show();
-        $('#my_result').hide();
-        $('table').hide();
-        $("#cameraButton").show();
-        $(this).hide();
-        $('.result_div').hide();
-    })
+
+    var passedTimer;
+    function startTimer()
+    {
+        var millisecondsPeriod = 5000;
+
+        // Set the date we're counting down to
+        var countDownDate = new Date().getTime()+millisecondsPeriod;
+
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+
+            // Get todays date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now an the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result in the element with id="demo"
+            document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+            //If the count down is finished, reset timer and take photo 
+            if (distance < 0) {
+                countDownDate = new Date().getTime()+millisecondsPeriod;
+                take_snapshot();
+            }
+        }, 1000);
+
+        passedTimer = x;
+
+    }
+
+    function stopTimer()
+    {
+        clearInterval(passedTimer);
+    }
+
+    $("#startTimerButton").click(startTimer)
+    $("#stopTimerButton").click(stopTimer)
 
     function dataURItoBlob(dataURI) {
         // convert base64/URLEncoded data component to raw binary data held in a string
