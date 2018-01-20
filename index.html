@@ -1,83 +1,37 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <script src="webcam.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>Emotion API</title>
+    <link href="css/site.css" rel="stylesheet">
+    <script src="scripts/jquery-3.1.0.min.js">
     </script>
-    </head>
-    <body>
-         <div id="my_camera" style="width:320px; height:240px;"></div>
-        <div id="my_result"></div>
-
-
-        
-    <script language="JavaScript">
-        Webcam.attach( '#my_camera' );
-
-        function take_snapshot() {
-            Webcam.snap( function(data_uri) {
-                document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
-            } );
-        }
+    <script src="scripts/script.js">
     </script>
-    
-    <script>
-    var passedTimer;
-
-    document.getElementById("stopLink").style.Display = block;
-
-    function startTimer()
-    {
-        var millisecondsPeriod = 3000;
-
-        // Set the date we're counting down to
-        var countDownDate = new Date().getTime()+millisecondsPeriod;
-
-        // Update the count down every 1 second
-        var x = setInterval(function() {
-
-            // Get todays date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now an the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Display the result in the element with id="demo"
-            document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
-
-            //If the count down is finished, reset timer and take photo 
-            if (distance < 0) {
-                countDownDate = new Date().getTime()+millisecondsPeriod;
-                take_snapshot();
-            }
-        }, 1000);
-
-        passedTimer = x;
-
-    }
-
-    function stopTimer()
-    {
-        clearInterval(passedTimer);
-    }
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+        <script src="Legacy%20code/webcam.js">
     </script>
+</head>
+<body>
+    <div>
+        <h1>Emotion Detector</h1>
+        <h2>Emotion Recognition App</h2>
+    </div><!--webcamJS-->
 
-    <a href="javascript:void(take_snapshot())">Take Snapshot</a>
-    <a id="startLink" href="javascript:void(startTimer())">Start Timer</a>
-    <a id="stopLink" href="javascript:void(stopTimer())">Stop Timer</a>
-
-    <!-- Display the countdown timer in an element -->
-    <p id="demo"></p>
-
-
-
-    </body>
+    <div id="my_camera" style="width:320px; height:240px;"></div>
+    <div id="my_result"></div><br>
+    <div class="buttons">
+        <button class="buttons" id='ok' type="button"></button> <button class="buttons" id='redo' type="button"></button> <button class="buttons" id='redoredo' type="button"></button>
+    </div><br>
+    <div class='phototake'>
+        <button class="buttons" id="cameraButton">Take Snapshot</button>
+    </div>
+    <div class='result_div'></div>
+    <!-- <blockquote class="embedly-card" data-card-key="2e479aa879284f92a5d2d88b33d7dd1a" data-card-theme="dark" data-card-type="article-full">
+        <h4><a href="http://www.cnn.com/2016/02/03/health/resting-bitch-face-research-irpt/">'Resting bitch face' is real, scientists say</a></h4>
+        <p>The phenomenon known as "resting bitch face" is real, according to scientists. Better yet, there's research available that could explain why some people are "throwing shade."</p>
+    </blockquote> -->
+    <script async charset="UTF-8" src="//cdn.embedly.com/widgets/platform.js">
+    </script>
+</body>
 </html>
-
-
