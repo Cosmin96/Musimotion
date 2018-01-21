@@ -23,10 +23,11 @@ $(function() {
     var passedTimer;
     function startTimer()
     {
-        var millisecondsPeriod = 3000;
+        var millisecondsPeriod = 2400;
 
         // Set the date we're counting down to
-        var countDownDate = new Date().getTime();
+        var downDate = new Date().getTime();
+        targetDistance = - millisecondsPeriod;
 
         // Update the count down every 1 second
         var x = setInterval(function() {
@@ -48,8 +49,8 @@ $(function() {
             + minutes + "m " + seconds + "s ";
 
             //If the count down is finished, reset timer and take photo 
-            if (distance < 0) {
-                countDownDate = new Date().getTime()+millisecondsPeriod;
+            if (distance < targetDistance) {
+                targetDistance -= millisecondsPeriod;
                 take_snapshot();
             }
         }, 1000);
