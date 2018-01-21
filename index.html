@@ -14,24 +14,97 @@
 </head>
 <body>
     <div>
-        <h1>Emotion Detector</h1>
-        <h2>Emotion Recognition App</h2>
+        <h1>Musimotion</h1>
+        <h2>Turn your feelings into music</h2>
     </div><!--webcamJS-->
 
-    <div id="my_camera" style="width:320px; height:240px;"></div>
+    <div id="my_camera" style="width:400px; height:400px;"></div>
     <div id="my_result"></div>
-    <div class='phototake'>
-        <button class="buttons" id="startTimerButton">Start Timer</button>
-        <button class="buttons" id="stopTimerButton">Stop Timer</button>
+    <div class='phototake' style="margin-top: 2%">
+        <button class="buttons button button1"  style="margin-right: 2%" onclick="JavaScript: play();" id="startTimerButton">Start</button>
+        <button class="buttons button button2"  onclick="JavaScript: play();" id="stopTimerButton">Stop</button>
     </div>
     <!-- Display the countdown timer in an element -->
     <p id="demo"></p>
-    <div class='result_div'></div>
+    <div class='result_div' style="margin-top: 2%"></div>
     <!-- <blockquote class="embedly-card" data-card-key="2e479aa879284f92a5d2d88b33d7dd1a" data-card-theme="dark" data-card-type="article-full">
         <h4><a href="http://www.cnn.com/2016/02/03/health/resting-bitch-face-research-irpt/">'Resting bitch face' is real, scientists say</a></h4>
         <p>The phenomenon known as "resting bitch face" is real, according to scientists. Better yet, there's research available that could explain why some people are "throwing shade."</p>
     </blockquote> -->
+    
+    <div id="equalizer" class="equalizer">
+       <span class="column" id="purple"></span>
+       <span class="column" id="blue"></span>
+       <span class="column" id="cyan"></span>
+       <span class="column" id="green"></span>
+       <span class="column" id="yellow"></span>
+       <span class="column" id="orange"></span>
+       <span class="column" id="red"></span> 
+      <br/>
+    </div>
+
+    <script>
+    function randomNumber(min, max) {
+      number =  Math.floor((Math.random()*(max-min))+ min);
+      return number;
+    }
+
+    //Initialise starting values
+    var purple, blue, cyan, green, yellow, orange, red;
+    purple = 160;
+    blue = 140;
+    cyan = 100;
+    green = 140;
+    yellow = 180;
+    orange = 70;
+    red = 200;
+
+    //To start with the equalizer is paused
+    var playing=false;
+    $("#equalizer").hide();
+        $("#demo").hide();
+    // A Function to change the height of a column more or less randomly
+    function changeHeight(column, height) {
+      height-=randomNumber(-20,20);
+      if (height>200) height=200;
+      if (height<5) height=5;
+      column.style.height=height + "px";  
+      return height;
+    }
+
+
+    //A Function that will be run every 50ms to animate the equalizer
+    function animate() {
+      if (playing) {
+        purple = changeHeight(document.getElementById("purple"),purple);     blue = changeHeight(document.getElementById("blue"),blue); 
+        cyan = changeHeight(document.getElementById("cyan"),cyan); 
+        green = changeHeight(document.getElementById("green"),green); 
+        yellow = changeHeight(document.getElementById("yellow"),yellow); 
+        orange = changeHeight(document.getElementById("orange"),orange); 
+        red = changeHeight(document.getElementById("red"),red); 
+
+        //Repeat this function every 50 ms
+        setTimeout(animate, 50);
+      }
+    }
+
+    //A Function to play or pause the animation
+    function play() {
+      if (playing) {
+        playing=false;
+          $("#equalizer").hide();
+        //document.getElementById("startTimerButton").value="Play";    
+      } else {
+        playing=true;
+          $("#equalizer").show();
+        //document.getElementById("stopTimerButton").value="Pause";
+        animate();
+      }
+    }
+    </script>
+    
     <script async charset="UTF-8" src="//cdn.embedly.com/widgets/platform.js">
     </script>
+    
 </body>
 </html>

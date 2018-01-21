@@ -1,5 +1,5 @@
 ﻿html {
-    background-color: #3B3738;
+    background-color: #3877F7;
 }
 body {
     font-family: 'Titillium Web', sans-serif;
@@ -48,3 +48,73 @@ h1, h2, h3 {
 .article {
     display: none;
 }
+
+.equalizer {
+  text-align: center;
+  margin: 10px auto;
+  width: 380px;
+}
+
+.column {
+  display: inline-block;
+  width: 40px;
+  margin: 5px;
+}
+
+#purple {
+  height: 160px;
+  background-color: #8800FF;
+}
+
+#blue {
+  height: 140px;
+  background-color: #0022FF;
+}
+
+#cyan {
+  height: 100px;
+  background-color: #22FFFF;
+}
+
+#green {
+  height: 140px;
+  background-color: #00BB00;
+}
+
+#yellow {
+  height: 180px;
+  background-color: #FFFF00;
+}
+
+#orange {
+  height: 70px;
+  background-color: #FF6600;
+}
+
+#red {
+  height: 200px;
+  background-color: #FF0000;
+}
+
+#black {
+  display: inline-block;
+  height: 240px;
+  width: 1px;
+  background-color: #000000;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.button1 {background-color: #4CAF50;} /* Green */
+.button2 {background-color: #f44336;} /* Red */ 
+
