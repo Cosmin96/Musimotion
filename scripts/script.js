@@ -6,8 +6,6 @@ $(function() {
     Webcam.attach('#my_camera');
 
 
-    //DAAedit
-    var audio = new Audio("music/anger.wav");
 
     function take_snapshot() {
         Webcam.snap(function(data_uri) {
@@ -23,10 +21,10 @@ $(function() {
     var passedTimer;
     function startTimer()
     {
-        var millisecondsPeriod = 2400;
+        var millisecondsPeriod = 3000;
 
         // Set the date we're counting down to
-        var downDate = new Date().getTime();
+        var startDate = new Date().getTime();
         targetDistance = - millisecondsPeriod;
 
         // Update the count down every 1 second
@@ -36,7 +34,7 @@ $(function() {
             var now = new Date().getTime();
 
             // Find the distance between now an the count down date
-            var distance = countDownDate - now;
+            var distance = startDate - now;
 
             // Time calculations for days, hours, minutes and seconds
             var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -53,16 +51,36 @@ $(function() {
                 targetDistance -= millisecondsPeriod;
                 take_snapshot();
             }
-        }, 1000);
+        }, 100);
 
         passedTimer = x;
 
+        for (var index in emotions) {
+            var emotion = emotions[index];
+            audios[emotion].play();
+        }
+        turnOn(currentEmotion);
     }
 
     function stopTimer()
     {
-        audio.pause();
         clearInterval(passedTimer);
+
+        for (var index in emotions) {
+            var emotion = emotions[index];
+            audios[emotion].pause();
+            audios[emotion].currentTime = 0;
+            if (audios[emotion+"Timer"]!=null)
+                clearInterval(audios[emotion+"Timer"]);
+            audios[emotion].volume = 0;
+        }
+
+        currentEmotion = initialEmotion;
+
+
+        var resultDiv = $(".result_div");
+
+        resultDiv.html("");
     }
 
     $("#startTimerButton").click(startTimer)
@@ -83,6 +101,105 @@ $(function() {
         return new Blob([ia], {
             type: mimeString
         });
+    }
+
+    var audios =
+    {
+        "anger": new Audio("music/anger.wav"),
+        "angerTimer": null,
+        "contempt": new Audio("music/contempt.wav"),
+        "contemptTimer": null,
+        "disgust": new Audio("music/disgust.wav"),
+        "disgustTimer": null,
+        "fear": new Audio("music/fear.wav"),
+        "fearTimer": null,
+        "happiness": new Audio("music/happiness.wav"),
+        "happinessTimer": null,
+        "neutral": new Audio("music/neutral.wav"),
+        "neutralTimer": null,
+        "sadness": new Audio("music/sadness.wav"),
+        "sadnessTimer": null,
+        "surprise": new Audio("music/surprise.wav"),
+        "surpriseTimer": null
+    }
+
+    var emotions =
+    [
+        "anger",
+        "contempt",
+        "disgust",
+        "fear",
+        "happiness",
+        "neutral",
+        "sadness",
+        "surprise"
+    ]
+
+    for (var index in emotions) {
+        var emotion = emotions[index];
+        console.log(emotion);
+        audios[emotion].volume = 0;
+        audios[emotion].loop=true;
+        // audios[emotion].addEventListener('ended', function() {
+//                    this.currentTime = 0;
+  //                  this.play();
+    //            }, false);
+    }
+    var initialEmotion = "neutral";
+    var currentEmotion = initialEmotion;
+
+    function turnOff(pString)
+    {
+        var pAudio = audios[pString];
+
+        var lTimer = audios[pString+"Timer"];
+        if (lTimer!=null)
+            clearInterval(lTimer);
+
+        var speed = 0.01;
+        var repeatFreq = 10;
+        var turnOffTimer = setInterval(function(){
+            var newVol = pAudio.volume - speed;
+            if (newVol<0)
+            {
+                pAudio.volume = 0;
+                clearInterval(turnOffTimer);
+            }
+            else
+            {
+                pAudio.volume-=speed;
+            }
+
+
+        },repeatFreq)
+
+        audios[pString+"Timer"] = turnOffTimer;
+    }
+
+    function turnOn(pString)
+    {
+        var pAudio = audios[pString];
+
+        var lTimer = audios[pString+"Timer"];
+        if (lTimer!=null)
+            clearInterval(lTimer);
+
+        var speed = 0.01;
+        var repeatFreq = 10;
+        var turnOnTimer = setInterval(function(){
+            var newVol = pAudio.volume + speed;
+            if (newVol>1)
+            {
+                pAudio.volume = 1;
+                clearInterval(turnOnTimer);
+            }
+            else
+            {
+                pAudio.volume+=speed;
+            }
+        },repeatFreq)
+
+        audios[pString+"Timer"] = turnOnTimer;
     }
 
     var getFaceInfo = function(photo) {
@@ -135,7 +252,6 @@ $(function() {
                 var maxOutput = Math.max.apply(Math, newOutputs);
                 var outputText = "";
 
-                //DAAedit
                 var foundOutput;
 
                 // if (maxOutput == faceNeutral) {
@@ -148,18 +264,18 @@ $(function() {
                     for (var prop in outputs) {
                         if (outputs[prop] == maxOutput) {
                             outputText = "<h3>" + "We've detected " + "<i>" + prop + "</i>" + "</h3>"
-                            foundOutput = prop;
+                            foundEmotion = prop;
                         }
                     }
                 // }
 
-                audio.pause();
-                audio = new Audio("music/"+foundOutput+".wav");  
-                    audio.addEventListener('ended', function() {
-                    this.currentTime = 0;
-                    this.play();
-                }, false);
-                audio.play();
+
+                if (foundEmotion!=currentEmotion)
+                {
+                    turnOff(currentEmotion);
+                    turnOn(foundEmotion);
+                }
+                currentEmotion = foundEmotion;
 
                 console.log(outputText);
                 resultDiv.html(outputText);
