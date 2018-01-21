@@ -5,6 +5,10 @@ $(function() {
     });
     Webcam.attach('#my_camera');
 
+
+    //DAAedit
+    var audio = new Audio("music/anger.wav");
+
     function take_snapshot() {
         Webcam.snap(function(data_uri) {
             //document.getElementById('my_result').innerHTML = '<img src="' + data_uri + '"/>';
@@ -19,7 +23,7 @@ $(function() {
     var passedTimer;
     function startTimer()
     {
-        var millisecondsPeriod = 5000;
+        var millisecondsPeriod = 3000;
 
         // Set the date we're counting down to
         var countDownDate = new Date().getTime();
@@ -56,6 +60,7 @@ $(function() {
 
     function stopTimer()
     {
+        audio.pause();
         clearInterval(passedTimer);
     }
 
@@ -78,6 +83,7 @@ $(function() {
             type: mimeString
         });
     }
+
     var getFaceInfo = function(photo) {
         var params = { };
         var subscriptionKey = "5a03eb1ee7dc4b8d999a0b219dd6f143";
@@ -127,6 +133,10 @@ $(function() {
                 console.log(newOutputs);
                 var maxOutput = Math.max.apply(Math, newOutputs);
                 var outputText = "";
+
+                //DAAedit
+                var foundOutput;
+
                 // if (maxOutput == faceNeutral) {
                 //     if (faceNeutral > 0.85 && faceHappiness < 0.25) {
                 //         outputText = "<h3>" + "We've detected " + "<i>" + "a resting bitch face" + "</i>" + "</h3><h4><i>(hint: smile)</i></h4>";
@@ -137,9 +147,19 @@ $(function() {
                     for (var prop in outputs) {
                         if (outputs[prop] == maxOutput) {
                             outputText = "<h3>" + "We've detected " + "<i>" + prop + "</i>" + "</h3>"
+                            foundOutput = prop;
                         }
                     }
                 // }
+
+                audio.pause();
+                audio = new Audio("music/"+foundOutput+".wav");  
+                    audio.addEventListener('ended', function() {
+                    this.currentTime = 0;
+                    this.play();
+                }, false);
+                audio.play();
+
                 console.log(outputText);
                 resultDiv.html(outputText);
             } else {
